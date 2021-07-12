@@ -35,6 +35,7 @@ class Home extends Component {
     // this.props.getItem();
     // this.props.getCategory();
     this.getProduct();
+    console.log(this.props);
 
     // console.log(this.props.getItemCategory(this.props.route.params.id));
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

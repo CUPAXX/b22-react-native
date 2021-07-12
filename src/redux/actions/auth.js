@@ -9,16 +9,19 @@ export const authLogin = (email, password) => {
     const form = new URLSearchParams();
     form.append('email', email);
     form.append('password', password);
+
     try {
       const {data} = await http().post(
         `${REACT_APP_BASE_URL}/auth/login`,
         form.toString(),
       );
+
       dispatch({
         type: 'AUTH_LOGIN',
         payload: data.results.token,
       });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: 'AUTH_LOGIN_FAILED',
         payload: err.response.data.message,

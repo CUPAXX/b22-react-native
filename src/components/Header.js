@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {DrawerActions} from 'react-navigation';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntIcon from 'react-native-vector-icons/AntDesign';
@@ -13,11 +14,12 @@ const Header = ({navigation, scene}) => {
         scene.route.name === 'Payment' ||
         scene.route.name === 'Profile' ||
         scene.route.name === 'home' ||
-        scene.route.name === 'Cart'
+        scene.route.name === 'Cart' ||
+        scene.route.name === 'root'
           ? HeaderStyles.headerSec
           : HeaderStyles.header
       }>
-      {scene.route.name === 'home' ? (
+      {scene.route.name === 'home' || scene.route.name === 'root' ? (
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <AntIcon
             name={'menuunfold'}
@@ -37,6 +39,7 @@ const Header = ({navigation, scene}) => {
         </TouchableOpacity>
       )}
       {scene.route.name === 'home' ||
+      scene.route.name === 'root' ||
       scene.route.name === 'detail' ||
       scene.route.name === 'Profile' ? (
         <View />
@@ -45,7 +48,9 @@ const Header = ({navigation, scene}) => {
       )}
 
       <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-        {scene.route.name === 'detail' || scene.route.name === 'home' ? (
+        {scene.route.name === 'detail' ||
+        scene.route.name === 'root' ||
+        scene.route.name === 'home' ? (
           <AntIcon
             name={'shoppingcart'}
             size={25}

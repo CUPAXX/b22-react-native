@@ -27,7 +27,15 @@ class ProductDetail extends Component {
   };
 
   addItem = () => {
-    this.props.addItems(this.props.item.detail);
+    const data = {
+      id: this.props.item.detail.id,
+      productName: this.props.item.detail.productName,
+      picture: this.props.item.detail.picture,
+      variant: this.props.item.detail.variant,
+      base_price: this.props.item.detail.base_price,
+      amount: 1,
+    };
+    this.props.addItems(data);
     // .then(() => {
     ToastAndroid.showWithGravity(
       'Success add to cart',

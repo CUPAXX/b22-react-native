@@ -34,18 +34,37 @@ class Profile extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.profile}>
-            <Image
-              style={styles.profilePict}
-              source={{uri: `${data.picture}`}}
-            />
+            {data.picture !== 'http://localhost:8080null' ? (
+              <Image
+                source={{uri: `${data?.picture}`}}
+                style={styles.profilePict}
+              />
+            ) : (
+              <Image
+                source={require('../assets/profile.png')}
+                style={styles.profilePict}
+              />
+            )}
             <View style={styles.parentTextInfo}>
-              <Text style={styles.name}>{data.userName}</Text>
+              {data.userName !== null ? (
+                <Text style={styles.name}>{data?.userName}</Text>
+              ) : (
+                <Text style={styles.name}>Please Add Your Username</Text>
+              )}
               <Text style={styles.subTextProfile}>{data.email}</Text>
               <Text style={styles.subTextProfile}>{data.phoneNumber}</Text>
-              <Text style={styles.subTextProfile}>{data.address}</Text>
+              {data.address !== null ? (
+                <Text style={styles.subTextProfile}>{data.address}</Text>
+              ) : (
+                <Text style={styles.subTextProfile}>
+                  Please Add Your Address
+                </Text>
+              )}
             </View>
           </View>
-          <TouchableOpacity style={styles.btnParent}>
+          <TouchableOpacity
+            style={styles.btnParent}
+            onPress={() => this.props.navigation.navigate('history')}>
             <Text style={styles.textHis}>Order History</Text>
             <Icon name={'chevron-right'} />
           </TouchableOpacity>

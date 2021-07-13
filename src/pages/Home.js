@@ -6,16 +6,15 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
-  FlatList,
   LogBox,
 } from 'react-native';
 import {Spinner} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ItemHome from '../components/ItemHome';
+import ItemHome2 from '../components/ItemHome2';
 import Category from '../components/Category';
 import {connect} from 'react-redux';
-import {getItem} from '../redux/actions/item';
+import {getItemSec} from '../redux/actions/item';
 import {getCategory} from '../redux/actions/category';
 import {getItemCategory} from '../redux/actions/cateItem';
 
@@ -30,12 +29,12 @@ class Home extends Component {
     addOn: [],
     isLoading: true,
     loading: true,
+    itemSearch: [],
   };
   componentDidMount() {
-    // this.props.getItem();
     // this.props.getCategory();
     this.getProduct();
-    console.log(this.props);
+    this.getSearch();
 
     // console.log(this.props.getItemCategory(this.props.route.params.id));
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -75,11 +74,19 @@ class Home extends Component {
     });
   };
 
+  getSearch = () => {
+    this.props.getItemSec().then(() => {
+      this.setState({
+        itemSearch: this.props.item.data,
+        isLoading: false,
+      });
+    });
+  };
+
   updateSearch = search => {
     this.setState({search});
   };
   render() {
-    // console.log(this.state);
     return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
@@ -92,135 +99,180 @@ class Home extends Component {
             containerStyle={styles.searchContainer}
             inputStyle={styles.searchInput}
           />
-          <View style={styles.parentGroup}>
-            <Category title={this.state.categories[0]?.categoryName} />
-            <Text style={styles.see}>See More</Text>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {this.state.favoriteProduct !== [] ? (
-                this.state.favoriteProduct.map(d => (
-                  <ItemHome
-                    func={() =>
-                      this.props.navigation.navigate('detail', {
-                        id: d.id,
-                      })
-                    }
-                    key={d.id}
-                    name={d.productName}
-                    price={d.price}
-                    image={d.picture}
-                  />
-                ))
-              ) : (
-                <Spinner color="black" />
-              )}
-            </ScrollView>
-          </View>
 
-          <View style={styles.parentGroup}>
-            <Category title={this.state.categories[1]?.categoryName} />
-            <Text style={styles.see}>See More</Text>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {this.state.coffee !== [] ? (
-                this.state.coffee.map(d => (
-                  <ItemHome
-                    func={() =>
-                      this.props.navigation.navigate('detail', {
-                        id: d.id,
-                      })
-                    }
-                    key={d.id}
-                    name={d.productName}
-                    price={d.price}
-                    image={d.picture}
-                  />
-                ))
-              ) : (
-                <Spinner color="black" />
-              )}
-            </ScrollView>
-          </View>
+          {this.state.search !== '' ? (
+            <View style={styles.parentGroup}>
+              <Category title="Result" />
+              <View style={styles.coba}>
+                {this.state.itemSearch
+                  .filter(coba =>
+                    coba.productName.includes(`${this.state.search}`),
+                  )
+                  .map(dFilter => (
+                    <ItemHome2
+                      func={() =>
+                        this.props.navigation.navigate('detail', {
+                          id: dFilter.id,
+                        })
+                      }
+                      key={dFilter.id}
+                      name={dFilter.productName}
+                      price={dFilter.price}
+                      image={dFilter.picture}
+                    />
+                  ))}
+              </View>
+            </View>
+          ) : (
+            <React.Fragment>
+              <View style={styles.parentGroup}>
+                <Category title={this.state.categories[0]?.categoryName} />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('SeeMore', {id: 1})
+                  }>
+                  <Text style={styles.see}>See More</Text>
+                </TouchableOpacity>
+                <ScrollView
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}>
+                  {this.state.favoriteProduct !== [] ? (
+                    this.state.favoriteProduct.map(d => (
+                      <ItemHome
+                        func={() =>
+                          this.props.navigation.navigate('detail', {
+                            id: d.id,
+                          })
+                        }
+                        key={d.id}
+                        name={d.productName}
+                        price={d.price}
+                        image={d.picture}
+                      />
+                    ))
+                  ) : (
+                    <Spinner color="black" />
+                  )}
+                </ScrollView>
+              </View>
 
-          <View style={styles.parentGroup}>
-            <Category title={this.state.categories[2]?.categoryName} />
-            <Text style={styles.see}>See More</Text>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {this.state.nonCoffee !== [] ? (
-                this.state.nonCoffee.map(d => (
-                  <ItemHome
-                    func={() =>
-                      this.props.navigation.navigate('detail', {
-                        id: d.id,
-                      })
-                    }
-                    key={d.id}
-                    name={d.productName}
-                    price={d.price}
-                    image={d.picture}
-                  />
-                ))
-              ) : (
-                <Spinner color="black" />
-              )}
-            </ScrollView>
-          </View>
+              <View style={styles.parentGroup}>
+                <Category title={this.state.categories[1]?.categoryName} />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('SeeMore', {id: 2})
+                  }>
+                  <Text style={styles.see}>See More</Text>
+                </TouchableOpacity>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {this.state.coffee !== [] ? (
+                    this.state.coffee.map(d => (
+                      <ItemHome
+                        func={() =>
+                          this.props.navigation.navigate('detail', {
+                            id: d.id,
+                          })
+                        }
+                        key={d.id}
+                        name={d.productName}
+                        price={d.price}
+                        image={d.picture}
+                      />
+                    ))
+                  ) : (
+                    <Spinner color="black" />
+                  )}
+                </ScrollView>
+              </View>
 
-          <View style={styles.parentGroup}>
-            <Category title={this.state.categories[3]?.categoryName} />
-            <Text style={styles.see}>See More</Text>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {this.state.foods !== [] ? (
-                this.state.foods.map(d => (
-                  <ItemHome
-                    func={() =>
-                      this.props.navigation.navigate('detail', {
-                        id: d.id,
-                      })
-                    }
-                    key={d.id}
-                    name={d.productName}
-                    price={d.price}
-                    image={d.picture}
-                  />
-                ))
-              ) : (
-                <Spinner color="black" />
-              )}
-            </ScrollView>
-          </View>
+              <View style={styles.parentGroup}>
+                <Category title={this.state.categories[2]?.categoryName} />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('SeeMore', {id: 3})
+                  }>
+                  <Text style={styles.see}>See More</Text>
+                </TouchableOpacity>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {this.state.nonCoffee !== [] ? (
+                    this.state.nonCoffee.map(d => (
+                      <ItemHome
+                        func={() =>
+                          this.props.navigation.navigate('detail', {
+                            id: d.id,
+                          })
+                        }
+                        key={d.id}
+                        name={d.productName}
+                        price={d.price}
+                        image={d.picture}
+                      />
+                    ))
+                  ) : (
+                    <Spinner color="black" />
+                  )}
+                </ScrollView>
+              </View>
 
-          <View style={styles.parentGroup}>
-            <Category title={this.state.categories[4]?.categoryName} />
-            <Text style={styles.see}>See More</Text>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {this.state.addOn !== [] ? (
-                this.state.addOn.map(d => (
-                  <ItemHome
-                    func={() =>
-                      this.props.navigation.navigate('detail', {
-                        id: d.id,
-                      })
-                    }
-                    key={d.id}
-                    name={d.productName}
-                    price={d.price}
-                    image={d.picture}
-                  />
-                ))
-              ) : (
-                <Spinner color="black" />
-              )}
-            </ScrollView>
-          </View>
+              <View style={styles.parentGroup}>
+                <Category title={this.state.categories[3]?.categoryName} />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('SeeMore', {id: 4})
+                  }>
+                  <Text style={styles.see}>See More</Text>
+                </TouchableOpacity>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {this.state.foods !== [] ? (
+                    this.state.foods.map(d => (
+                      <ItemHome
+                        func={() =>
+                          this.props.navigation.navigate('detail', {
+                            id: d.id,
+                          })
+                        }
+                        key={d.id}
+                        name={d.productName}
+                        price={d.price}
+                        image={d.picture}
+                      />
+                    ))
+                  ) : (
+                    <Spinner color="black" />
+                  )}
+                </ScrollView>
+              </View>
+
+              <View style={styles.parentGroup}>
+                <Category title={this.state.categories[4]?.categoryName} />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('SeeMore', {id: 5})
+                  }>
+                  <Text style={styles.see}>See More</Text>
+                </TouchableOpacity>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {this.state.addOn !== [] ? (
+                    this.state.addOn.map(d => (
+                      <ItemHome
+                        func={() =>
+                          this.props.navigation.navigate('detail', {
+                            id: d.id,
+                          })
+                        }
+                        key={d.id}
+                        name={d.productName}
+                        price={d.price}
+                        image={d.picture}
+                      />
+                    ))
+                  ) : (
+                    <Spinner color="black" />
+                  )}
+                </ScrollView>
+              </View>
+            </React.Fragment>
+          )}
         </ScrollView>
         <View style={styles.botNavParent}>
           <TouchableOpacity
@@ -282,6 +334,11 @@ const styles = StyleSheet.create({
   parentGroup: {
     marginVertical: 20,
   },
+  coba: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 10,
+  },
 });
 
 const mapStateToProps = state => ({
@@ -290,7 +347,7 @@ const mapStateToProps = state => ({
   cateItem: state.cateItem,
 });
 
-const mapDispatchToProps = {getItem, getCategory, getItemCategory};
+const mapDispatchToProps = {getItemSec, getCategory, getItemCategory};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 

@@ -5,6 +5,7 @@ import category from './category';
 import cateItem from './cateItem';
 import auth from './auth';
 import profile from './profile';
+import transaction from './transaction';
 
 const reducer = combineReducers({
   auth,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   item,
   cateItem,
   profile,
+  transaction,
 });
 
 export default reducer;

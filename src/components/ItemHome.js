@@ -1,23 +1,13 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-} from 'react-native';
+import {Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 const ItemHome = props => {
-  const navigation = useNavigation();
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <TouchableOpacity onPress={props.func} style={styles.productCart}>
-        <Image style={styles.pictProduct} source={{uri: `${props.image}`}} />
-        <Text style={styles.productName}>{props.name}</Text>
-        <Text style={styles.price}>IDR {props.price}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    <TouchableOpacity onPress={props.func} style={styles.productCart}>
+      <Image style={styles.pictProduct} source={{uri: `${props.image}`}} />
+      <Text style={styles.productName}>{props.name}</Text>
+      <Text style={styles.price}>IDR {props.price}</Text>
+    </TouchableOpacity>
   );
 };
 export default ItemHome;

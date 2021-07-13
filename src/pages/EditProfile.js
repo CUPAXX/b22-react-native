@@ -106,10 +106,17 @@ class EditProfile extends Component {
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.warpAll}>
           <View style={styles.parentPict}>
-            <Image
-              style={styles.profilePict}
-              source={{uri: `${this.state.picture}`}}
-            />
+            {this.state.picture !== 'http://localhost:8080null' ? (
+              <Image
+                source={{uri: `${this.state.picture}`}}
+                style={styles.profilePict}
+              />
+            ) : (
+              <Image
+                source={require('../assets/profile.png')}
+                style={styles.profilePict}
+              />
+            )}
             <TouchableOpacity
               style={styles.parentEdit}
               onPress={() => launchImageLibrary({}, this.selectPict)}>
@@ -117,26 +124,58 @@ class EditProfile extends Component {
             </TouchableOpacity>
           </View>
           <Text style={styles.inputLabel}>User Name :</Text>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="black"
-            value={this.state.userName}
-            onChangeText={e => this.setState({userName: e})}
-          />
+          {this.state.userName !== null ? (
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="black"
+              value={this.state.userName}
+              onChangeText={e => this.setState({userName: e})}
+            />
+          ) : (
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="black"
+              placeholder="Example Username"
+              value={this.state.userName}
+              onChangeText={e => this.setState({userName: e})}
+            />
+          )}
+
           <Text style={styles.inputLabel}>First Name :</Text>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="black"
-            value={this.state.firstName}
-            onChangeText={e => this.setState({firstName: e})}
-          />
+          {this.state.firstName !== null ? (
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="black"
+              value={this.state.firstName}
+              onChangeText={e => this.setState({firstName: e})}
+            />
+          ) : (
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="black"
+              placeholder="Example FirstName"
+              onChangeText={e => this.setState({firstName: e})}
+            />
+          )}
+
           <Text style={styles.inputLabel}>Last Name :</Text>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="black"
-            value={this.state.lastName}
-            onChangeText={e => this.setState({lastName: e})}
-          />
+          {this.state.lastName !== null ? (
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="black"
+              value={this.state.lastName}
+              onChangeText={e => this.setState({lastName: e})}
+            />
+          ) : (
+            <TextInput
+              style={styles.input}
+              placeholderTextColor="black"
+              placeholder="Example LastName"
+              value={this.state.lastName}
+              onChangeText={e => this.setState({lastName: e})}
+            />
+          )}
+
           <View>
             <Radio.Group
               name="radioBtn"
@@ -194,12 +233,22 @@ class EditProfile extends Component {
           )}
 
           <Text style={styles.inputLabel}>Delivery Adress :</Text>
-          <TextInput
-            style={styles.input}
-            value={this.state.address}
-            placeholderTextColor="black"
-            onChangeText={e => this.setState({address: e})}
-          />
+          {this.state.address !== null ? (
+            <TextInput
+              style={styles.input}
+              value={this.state.address}
+              placeholderTextColor="black"
+              onChangeText={e => this.setState({address: e})}
+            />
+          ) : (
+            <TextInput
+              style={styles.input}
+              value={this.state.address}
+              placeholderTextColor="black"
+              placeholder="Example Address"
+              onChangeText={e => this.setState({address: e})}
+            />
+          )}
         </View>
         <TouchableOpacity style={styles.btn} onPress={this.data}>
           <Text style={styles.btnText}>Save and Update</Text>

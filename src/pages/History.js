@@ -1,34 +1,86 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import ItemHistory from '../components/ItemHistory';
+import {connect} from 'react-redux';
+import {getHistory} from '../redux/actions/transaction';
+import {setOrders, deleteItems} from '../redux/actions/carts';
 
-export default class History extends Component {
+class History extends Component {
+  componentDidMount() {
+    const {token} = this.props.auth;
+    this.props.getHistory(token);
+  }
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.parent}>
           <View style={styles.parentTag}>
             <Icon name="swipe" />
             <Text>swipe on an item to delete</Text>
           </View>
-          <View style={styles.parentProduct}>
-            <Image
-              style={styles.productPict}
-              source={require('../assets/productCart.png')}
-            />
-            <View style={styles.productChild}>
-              <Text style={styles.productName}>Veggie tomato mix</Text>
-              <Text style={styles.price}>IDR 34.000</Text>
-              <Text style={styles.status}>
-                Picked up at store [April 27th 2020, 8 AM]
-              </Text>
-            </View>
+          <SwipeListView
+            data={this.props.transaction.data}
+            renderItem={(data, rowMap) => (
+              <ItemHistory
+                key={data.item.id}
+                name={data.item.code}
+                price={data.item.total}
+                address={data.item.shipping_address}
+              />
+            )}
+            renderHiddenItem={(data, rowMap) => (
+              <View style={styles.parentHide}>
+                <TouchableOpacity style={styles.actionCircle}>
+                  <Icon name="favorite-border" size={25} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionCircle}>
+                  <Icon name="delete-outline" size={25} />
+                </TouchableOpacity>
+              </View>
+            )}
+            leftOpenValue={130}
+            rightOpenValue={-130}
+          />
+          <View style={styles.bottom}>
+            {this.props.transaction.data.length === 0 ? (
+              <React.Fragment>
+                <Text style={styles.textEmpty}>You Don't Have Any History</Text>
+                <TouchableOpacity
+                  style={styles.btn}
+                  onPress={() => this.props.navigation.navigate('home')}>
+                  <Text style={styles.btnText}>Buy Some</Text>
+                </TouchableOpacity>
+              </React.Fragment>
+            ) : (
+              <Text style={styles.textEmpty}>Your Last Transaction</Text>
+            )}
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  transaction: state.transaction,
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {
+  getHistory,
+  deleteItems,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(History);
 
 const styles = StyleSheet.create({
   container: {
@@ -40,10 +92,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 70,
+    marginBottom: 20,
   },
   parent: {
     marginHorizontal: 30,
     alignItems: 'center',
+    marginBottom: 50,
   },
   parentProduct: {
     width: 300,
@@ -53,10 +107,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 40,
     paddingVertical: 10,
-  },
-  parentPrice: {
-    flexDirection: 'row',
-    marginTop: 5,
   },
   productName: {
     fontSize: 17,
@@ -89,5 +139,39 @@ const styles = StyleSheet.create({
   },
   status: {
     width: 200,
+  },
+  parentHide: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    height: '100%',
+  },
+  actionCircle: {
+    width: 45,
+    height: 45,
+    borderRadius: 45 / 2,
+    backgroundColor: '#FFBA33',
+    marginHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btn: {
+    backgroundColor: '#6A4029',
+    paddingVertical: 15,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  bottom: {
+    paddingBottom: 30,
+    paddingTop: 40,
+  },
+  textEmpty: {
+    textAlign: 'center',
+    paddingBottom: 20,
   },
 });

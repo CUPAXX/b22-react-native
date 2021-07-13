@@ -10,38 +10,31 @@ import {
 import {CheckBox} from 'react-native-elements';
 import {Radio} from 'native-base';
 
-export default class Checkout extends Component {
+import {createTransaction} from '../redux/actions/transaction';
+import {connect} from 'react-redux';
+
+class Checkout extends Component {
   state = {
-    checked: '',
+    checked: 'Door Delivery',
   };
   render() {
+    const {data} = this.props.profile;
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.parent}>
           <Text style={styles.deliv}>Delivery</Text>
           <View style={styles.top}>
             <Text style={styles.add}>Address Details</Text>
-            <Text style={styles.change}>Change</Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Edit Profile')}>
+              <Text style={styles.change}>Change</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.parentTopAdd}>
             <View style={styles.parentAddress}>
-              <TextInput
-                style={styles.input}
-                placeholder="Iskandar Street"
-                placeholderTextColor="black"
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Km 5 refinery road oppsite republic road, effurun, Jakarta"
-                multiline={true}
-                placeholderTextColor="black"
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="+62 81348287878"
-                multiline={true}
-                placeholderTextColor="black"
-              />
+              <Text style={styles.input}>Iskandar Street</Text>
+              <Text style={styles.input}>{data.address}</Text>
+              <Text style={styles.input}>{data.phoneNumber}</Text>
             </View>
           </View>
           <Text style={styles.delivMet}>Delivery methods</Text>
@@ -83,6 +76,19 @@ export default class Checkout extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  carts: state.carts,
+  transaction: state.transaction,
+  auth: state.auth,
+  profile: state.profile,
+});
+
+const mapDispatchToProps = {
+  createTransaction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
 
 const styles = StyleSheet.create({
   container: {
@@ -142,6 +148,7 @@ const styles = StyleSheet.create({
   input: {
     fontWeight: 'bold',
     borderBottomWidth: 0.5,
+    paddingVertical: 8,
   },
   parentTopDeliv: {
     alignItems: 'center',

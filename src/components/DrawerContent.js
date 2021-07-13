@@ -37,11 +37,22 @@ function DrawerContent({
     <View style={drawerStyles.parent}>
       {auth.token !== null ? (
         <View style={drawerStyles.child}>
-          <Image
-            source={{uri: `${data?.picture}`}}
-            style={drawerStyles.profile}
-          />
-          <Text style={drawerStyles.name}>{data?.userName}</Text>
+          {data.picture !== 'http://localhost:8080null' ? (
+            <Image
+              source={{uri: `${data?.picture}`}}
+              style={drawerStyles.profile}
+            />
+          ) : (
+            <Image
+              source={require('../assets/profile.png')}
+              style={drawerStyles.profile}
+            />
+          )}
+          {data.userName !== null ? (
+            <Text style={drawerStyles.name}>{data?.userName}</Text>
+          ) : (
+            <Text style={drawerStyles.name}>Please Add Your Username</Text>
+          )}
           <Text style={drawerStyles.email}>{data?.email}</Text>
         </View>
       ) : (
@@ -53,7 +64,39 @@ function DrawerContent({
         data={renderMenu}
         renderItem={({item, index}) => (
           <TouchableOpacity
+            style={drawerStyles.parentIcon}
             onPress={() => navigation.navigate(menuItem[index].split('-')[0])}>
+            {item === 'Main' ? (
+              <AntIcon name="home" color="#6A4029" size={20} />
+            ) : (
+              <View />
+            )}
+            {item === 'Edit Profile' ? (
+              <AntIcon name="user" color="#6A4029" size={20} />
+            ) : (
+              <View />
+            )}
+            {item === 'Order' ? (
+              <AntIcon name="shoppingcart" color="#6A4029" size={20} />
+            ) : (
+              <View />
+            )}
+            {item === 'All Menu' ? (
+              <AntIcon name="book" color="#6A4029" size={20} />
+            ) : (
+              <View />
+            )}
+            {item === 'Privacy Policy' ? (
+              <AntIcon name="filetext1" color="#6A4029" size={20} />
+            ) : (
+              <View />
+            )}
+            {item === 'Security' ? (
+              <AntIcon name="medicinebox" color="#6A4029" size={20} />
+            ) : (
+              <View />
+            )}
+
             <Text style={drawerStyles.itemText}>{item}</Text>
           </TouchableOpacity>
         )}
@@ -123,11 +166,11 @@ const drawerStyles = StyleSheet.create({
   itemText: {
     color: '#6A4029',
     fontSize: 15,
+    paddingLeft: 8,
   },
   separator: {
     borderBottomWidth: 2,
     borderBottomColor: '#6A4029',
-    marginHorizontal: 10,
     marginVertical: 15,
   },
   itemWrap: {
@@ -144,5 +187,9 @@ const drawerStyles = StyleSheet.create({
   },
   iconWrap: {
     justifyContent: 'center',
+  },
+  parentIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

@@ -13,7 +13,7 @@ import EditProfile from './src/pages/EditProfile';
 import Profile from './src/pages/Profile';
 import PrivacyPolicy from './src/pages/PrivacyPolicy';
 import Security from './src/pages/Security';
-import Favorite from './src/pages/FavoriteProduct';
+import SeeMoreProduct from './src/pages/SeeMoreProduct';
 import Checkout from './src/pages/Checkout';
 import Cart from './src/pages/Carts';
 import Payment from './src/pages/Payment';
@@ -23,10 +23,12 @@ import Login from './src/pages/Login';
 import Sign from './src/pages/Sign';
 import Forgot from './src/pages/Forgot';
 
+import History from './src/pages/History';
+
 import Header from './src/components/Header';
 import DrawerContent from './src/components/DrawerContent';
 
-// import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 // import AntIcon from 'react-native-vector-icons/AntDesign';
 
 const Stack = createStackNavigator();
@@ -78,8 +80,17 @@ class MainStack extends Component {
         />
 
         <Stack.Screen
-          component={Favorite}
-          name="Favorite"
+          component={SeeMoreProduct}
+          name="SeeMore"
+          options={{
+            header: Header,
+            headerTransparent: true,
+          }}
+        />
+
+        <Stack.Screen
+          component={History}
+          name="history"
           options={{
             header: Header,
             headerTransparent: true,
@@ -178,7 +189,9 @@ const App = props => {
           ) : (
             <React.Fragment>
               <Drawer.Screen
-                options={{title: 'Main'}}
+                options={{
+                  title: 'Main',
+                }}
                 name="root"
                 component={MainStack}
               />

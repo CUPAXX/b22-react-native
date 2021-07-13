@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 const ItemCarts = props => {
   return (
@@ -10,9 +10,13 @@ const ItemCarts = props => {
         <View style={styles.parentPrice}>
           <Text style={styles.price}>IDR {props.price}</Text>
           <View style={styles.counter}>
-            <Text style={styles.counterChild}>-</Text>
-            <Text style={styles.counterChild}>1</Text>
-            <Text style={styles.counterChild}>+</Text>
+            <TouchableOpacity onPress={props.funcMin}>
+              <Text style={styles.counterChild}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.counterText}>{props.amount}</Text>
+            <TouchableOpacity onPress={props.funcPlus}>
+              <Text style={styles.counterChild}>+</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 30,
+    marginVertical: 15,
     paddingHorizontal: 5,
   },
   parentPrice: {
@@ -68,6 +72,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   counterChild: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  counterText: {
     color: 'white',
     fontWeight: 'bold',
   },

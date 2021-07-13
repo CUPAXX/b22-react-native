@@ -2,10 +2,10 @@ import {http} from '../../helpers/http';
 
 import {REACT_APP_BASE_URL} from '@env';
 
-export const getItem = () => {
+export const getItemSec = () => {
   return async dispatch => {
     try {
-      const {data} = await http().get(`${REACT_APP_BASE_URL}/item`);
+      const {data} = await http().get(`${REACT_APP_BASE_URL}/item/search`);
       dispatch({
         type: 'ITEM_GET',
         payload: data.results,

@@ -6,13 +6,64 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  FlatList,
+  ToastAndroid,
 } from 'react-native';
 import {Radio} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default class Payment extends Component {
+import {createTransaction} from '../redux/actions/transaction';
+import {connect} from 'react-redux';
+import ItemPayment from '../components/ItemPayment';
+import {deleteAllItems} from '../redux/actions/carts';
+
+class Payment extends Component {
   state = {
-    checked: '',
+    checked: 'Bank account',
+    totalPerItem: 0,
+    totalAll: 0,
+  };
+
+  // componentDidMount() {
+  //   this.getPer();
+  // }
+
+  onPayment = e => {
+    e.preventDefault();
+    const {items} = this.props.carts;
+    const {token} = this.props.auth;
+    const data = items;
+    const auth = token;
+    const payment_method = this.state.checked;
+    this.props
+      .createTransaction(data, auth, payment_method)
+      .then(() => {
+        ToastAndroid.showWithGravity(
+          'Payment success',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+        );
+        this.props.navigation.navigate('home');
+        return this.props.deleteAllItems();
+      })
+      .catch(err => {
+        console.log(err);
+        ToastAndroid.showWithGravity(
+          'Something wrong',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+        );
+      });
+  };
+
+  getPer = () => {
+    const satu =
+      this.props.carts.items.map(coba => coba.base_price) *
+      this.props.carts.items.map(coba => coba.amount);
+    console.log(satu);
+    // this.setState({
+    //   totalPerItem: this.props.carts.items,
+    // });
   };
   render() {
     return (
@@ -22,18 +73,19 @@ export default class Payment extends Component {
             <Text style={styles.add}>Products</Text>
           </View>
           <View style={styles.parentTopProduct}>
-            <View style={styles.parentProduct}>
-              <View style={styles.childProduct}>
-                <Image source={require('../assets/payProduct.png')} />
-                <View style={styles.parentInside}>
-                  <Text style={styles.productName}>Hazelnut Latte</Text>
-                  <View style={styles.parentPrice}>
-                    <Text style={styles.productName}>x 1</Text>
-                    <Text style={styles.productPrice}>IDR 24.0</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+            <FlatList
+              style={styles.parentProduct}
+              data={this.props.carts.items}
+              renderItem={({item}) => (
+                <ItemPayment
+                  key={item.id}
+                  name={item.productName}
+                  price={item.base_price}
+                  image={item.picture}
+                  amount={item.amount}
+                />
+              )}
+            />
           </View>
           <Text style={styles.payMet}>Payment method</Text>
           <View style={styles.parentTopDeliv}>
@@ -82,7 +134,7 @@ export default class Payment extends Component {
             <Text style={styles.total}>Total</Text>
             <Text style={styles.price}>IDR 123.000</Text>
           </View>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={this.onPayment}>
             <Text style={styles.btnText}>Proceed payment</Text>
           </TouchableOpacity>
         </View>
@@ -90,6 +142,19 @@ export default class Payment extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  carts: state.carts,
+  transaction: state.transaction,
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {
+  createTransaction,
+  deleteAllItems,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);
 
 const styles = StyleSheet.create({
   container: {

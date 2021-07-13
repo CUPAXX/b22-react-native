@@ -8,6 +8,11 @@ export const setOrders = data => ({
   payload: data,
 });
 
+export const deleteItems = payload => ({
+  type: 'CARTS_DELETE_ITEMS',
+  payload,
+});
+
 export const deleteAllItems = () => ({
   type: 'CARTS_DELETE_ALL_ITEMS',
   payload: [],

@@ -1,14 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
-import {DrawerActions} from 'react-navigation';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 
 const Header = ({navigation, scene}) => {
-  useEffect(() => {
-    console.log('coba');
-  }, []);
   return (
     <React.Fragment>
       <View
@@ -19,7 +15,9 @@ const Header = ({navigation, scene}) => {
           scene.route.name === 'Profile' ||
           scene.route.name === 'home' ||
           scene.route.name === 'Cart' ||
-          scene.route.name === 'root'
+          scene.route.name === 'root' ||
+          scene.route.name === 'SeeMore' ||
+          scene.route.name === 'history'
             ? HeaderStyles.headerSec
             : HeaderStyles.header
         }>
@@ -45,6 +43,7 @@ const Header = ({navigation, scene}) => {
         {scene.route.name === 'home' ||
         scene.route.name === 'root' ||
         scene.route.name === 'detail' ||
+        scene.route.name === 'SeeMore' ||
         scene.route.name === 'Profile' ? (
           <View />
         ) : (
@@ -92,6 +91,7 @@ const HeaderStyles = StyleSheet.create({
   textHeader: {
     fontWeight: 'bold',
     fontSize: 20,
+    textTransform: 'capitalize',
   },
 });
 

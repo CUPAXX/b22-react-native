@@ -17,6 +17,7 @@ import {connect} from 'react-redux';
 import {getItemSec} from '../redux/actions/item';
 import {getCategory} from '../redux/actions/category';
 import {getItemCategory} from '../redux/actions/cateItem';
+import RNBootSplash from 'react-native-bootsplash';
 
 class Home extends Component {
   state = {
@@ -32,9 +33,15 @@ class Home extends Component {
     itemSearch: [],
   };
   componentDidMount() {
-    // this.props.getCategory();
-    this.getProduct();
-    this.getSearch();
+    const init = async () => {
+      this.getProduct();
+      this.getSearch();
+    };
+
+    init().finally(async () => {
+      await RNBootSplash.hide({fade: true});
+      console.log('Bootsplash has been hidden successfully');
+    });
 
     // console.log(this.props.getItemCategory(this.props.route.params.id));
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

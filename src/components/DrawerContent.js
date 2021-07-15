@@ -33,6 +33,11 @@ function DrawerContent({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.token]);
 
+  const onLogout = () => {
+    logout();
+    navigation.closeDrawer();
+  };
+
   return (
     <View style={drawerStyles.parent}>
       {auth.token !== null ? (
@@ -105,7 +110,7 @@ function DrawerContent({
       />
       <View>
         {auth.token !== null ? (
-          <TouchableOpacity onPress={logout}>
+          <TouchableOpacity onPress={onLogout}>
             <View style={drawerStyles.signOut}>
               <Text style={drawerStyles.textSignOut}>Sign-out</Text>
               <View style={drawerStyles.iconWrap}>

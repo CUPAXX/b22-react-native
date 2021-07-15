@@ -6,10 +6,17 @@ import cateItem from './cateItem';
 import auth from './auth';
 import profile from './profile';
 import transaction from './transaction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {persistReducer} from 'redux-persist';
+
+const persistAuth = {
+  key: 'auth',
+  storage: AsyncStorage,
+};
 
 const reducer = combineReducers({
-  auth,
   carts,
+  auth: persistReducer(persistAuth, auth),
   category,
   item,
   cateItem,

@@ -7,11 +7,15 @@ import {
   TouchableOpacity,
   TextInput,
   ToastAndroid,
+  Alert,
+  Button,
 } from 'react-native';
 
 const image = require('../assets/bgSign.png');
 import {connect} from 'react-redux';
 import {authRegister} from '../redux/actions/auth';
+import {Formik} from 'formik';
+import * as yup from 'yup';
 
 class Sign extends Component {
   state = {
@@ -20,8 +24,8 @@ class Sign extends Component {
     phoneNumber: '',
   };
 
-  register = () => {
-    const {email, password, phoneNumber} = this.state;
+  register = values => {
+    const {email, password, phoneNumber} = values;
     this.props.authRegister(email, password, phoneNumber).then(() => {
       if (this.props.auth.errMsg === '') {
         ToastAndroid.showWithGravity(
@@ -39,39 +43,95 @@ class Sign extends Component {
       }
     });
   };
+  componentDidMount() {
+    console.log(this.register);
+  }
   render() {
     return (
       <View style={styles.container}>
         <ImageBackground source={image} style={styles.bg}>
           <View style={styles.bgBlack}>
             <Text style={styles.tagline}>Sign Up</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email adress"
-              placeholderTextColor="#fff"
-              autoCompleteType="email"
-              onChangeText={val => this.setState({email: val})}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your password"
-              autoCompleteType="password"
-              secureTextEntry={true}
-              placeholderTextColor="#fff"
-              onChangeText={val => this.setState({password: val})}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your phone number"
-              placeholderTextColor="#fff"
-              keyboardType="numeric"
-              onChangeText={val => this.setState({phoneNumber: val})}
-            />
-            <TouchableOpacity
-              style={styles.buttonBrown}
-              onPress={this.register}>
-              <Text style={styles.btnTextBrown}>Create Account</Text>
-            </TouchableOpacity>
+            <Formik
+              initialValues={{
+                phoneNumber: '',
+                email: '',
+                password: '',
+              }}
+              onSubmit={values => this.register(values)}
+              validationSchema={yup.object().shape({
+                phoneNumber: yup
+                  .string()
+                  .required('Please, provide your phone number!'),
+                email: yup.string().email().required(),
+                password: yup
+                  .string()
+                  .min(7, 'Password at least 7 character')
+                  .max(15, 'Password should not excced 15 chars.')
+                  .required(),
+              })}>
+              {({
+                values,
+                handleChange,
+                errors,
+                setFieldTouched,
+                touched,
+                isValid,
+                handleSubmit,
+              }) => (
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    value={values.email}
+                    placeholder="Enter your email adress"
+                    placeholderTextColor="#fff"
+                    autoCompleteType="email"
+                    onChangeText={handleChange('email')}
+                    onBlur={() => setFieldTouched('email')}
+                  />
+                  {touched.email && errors.email && (
+                    <Text style={styles.errmsg}>{errors.email}</Text>
+                  )}
+                  <TextInput
+                    style={styles.input}
+                    value={values.password}
+                    placeholder="Enter your password"
+                    autoCompleteType="password"
+                    secureTextEntry={true}
+                    placeholderTextColor="#fff"
+                    onChangeText={handleChange('password')}
+                    onBlur={() => setFieldTouched('password')}
+                  />
+                  {touched.password && errors.password && (
+                    <Text style={styles.errmsg}>{errors.password}</Text>
+                  )}
+                  <TextInput
+                    style={styles.input}
+                    value={values.phoneNumber}
+                    placeholder="Enter your phone number"
+                    placeholderTextColor="#fff"
+                    keyboardType="numeric"
+                    onChangeText={handleChange('phoneNumber')}
+                    onBlur={() => setFieldTouched('phoneNumber')}
+                  />
+                  {touched.phoneNumber && errors.phoneNumber && (
+                    <Text style={styles.errmsg}>{errors.phoneNumber}</Text>
+                  )}
+                  {/* <Button
+                    color="#3740FE"
+                    title="Submit"
+                    disabled={!isValid}
+                    onPress={handleSubmit}
+                  /> */}
+                  <TouchableOpacity
+                    style={styles.buttonBrown}
+                    disabled={!isValid}
+                    onPress={handleSubmit}>
+                    <Text style={styles.btnTextBrown}>Create Account</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </Formik>
             <TouchableOpacity style={styles.buttonWhite}>
               <Text style={styles.btnTextWhite}>Create with Google</Text>
             </TouchableOpacity>
@@ -110,6 +170,7 @@ const styles = StyleSheet.create({
   bgBlack: {
     height: '100%',
     alignItems: 'center',
+    backgroundColor: 'rgba(82, 86, 92, 0.4)',
     // justifyContent: 'center',
   },
   buttonBrown: {
@@ -139,11 +200,22 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     width: 280,
-    margin: 12,
+    margin: 8,
     color: 'white',
     borderBottomWidth: 1,
     borderBottomColor: 'white',
-    fontWeight: '700',
+    fontWeight: 'bold',
+    fontSize: 15,
     // letterSpacing: 2,
+  },
+  errmsg: {
+    fontSize: 13,
+    textTransform: 'capitalize',
+    color: '#ff8000',
+    marginLeft: 10,
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(105, 105, 105, 0.6)',
+    paddingVertical: 5,
+    paddingLeft: 5,
   },
 });

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import {Radio} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -16,6 +17,7 @@ import {createTransaction} from '../redux/actions/transaction';
 import {connect} from 'react-redux';
 import ItemPayment from '../components/ItemPayment';
 import {deleteAllItems} from '../redux/actions/carts';
+import {showMessage} from 'react-native-flash-message';
 
 class Payment extends Component {
   state = {
@@ -28,32 +30,50 @@ class Payment extends Component {
   //   this.getPer();
   // }
 
-  onPayment = e => {
-    e.preventDefault();
+  onPayment = () => {
     const {items} = this.props.carts;
     const {token} = this.props.auth;
     const data = items;
     const auth = token;
     const payment_method = this.state.checked;
-    this.props
-      .createTransaction(data, auth, payment_method)
-      .then(() => {
-        ToastAndroid.showWithGravity(
-          'Payment success',
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-        );
+
+    this.props.createTransaction(data, auth, payment_method).then(() => {
+      if (this.props.transaction.errMsg === '') {
+        showMessage({
+          message: 'Payment Success',
+          type: 'default',
+          backgroundColor: '#01937C',
+          color: 'white',
+        });
         this.props.navigation.navigate('home');
         return this.props.deleteAllItems();
-      })
-      .catch(err => {
-        console.log(err);
-        ToastAndroid.showWithGravity(
-          'Something wrong',
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-        );
-      });
+      } else {
+        showMessage({
+          message: `${this.props.transaction.errMsg}`,
+          type: 'default',
+          backgroundColor: '#D54C4C',
+          color: 'white',
+        });
+        // ToastAndroid.showWithGravity(
+        //   `${this.props.transaction.errMsg}`,
+        //   ToastAndroid.LONG,
+        //   ToastAndroid.TOP,
+        // );
+      }
+    });
+  };
+
+  onAlert = () => {
+    Alert.alert('Confirm Payment', 'Are You Ready To Pay ?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => this.onPayment(),
+      },
+    ]);
   };
 
   getPer = () => {
@@ -134,7 +154,7 @@ class Payment extends Component {
             <Text style={styles.total}>Total</Text>
             <Text style={styles.price}>IDR 123.000</Text>
           </View>
-          <TouchableOpacity style={styles.btn} onPress={this.onPayment}>
+          <TouchableOpacity style={styles.btn} onPress={this.onAlert}>
             <Text style={styles.btnText}>Proceed payment</Text>
           </TouchableOpacity>
         </View>

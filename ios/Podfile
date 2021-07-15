@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'CoffeeShopApp' do
+target 'CPXCoffeshop' do
   config = use_native_modules!
 
   use_react_native!(
@@ -14,7 +14,7 @@ target 'CoffeeShopApp' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  target 'CoffeeShopAppTests' do
+  target 'CPXCoffeshopTests' do
     inherit! :complete
     # Pods for testing
   end

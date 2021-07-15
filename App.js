@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+/* eslint-disable no-shadow */
+import React, {Component, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -28,7 +29,8 @@ import History from './src/pages/History';
 import Header from './src/components/Header';
 import DrawerContent from './src/components/DrawerContent';
 
-import Icon from 'react-native-vector-icons/FontAwesome';
+import RNBootSplash from 'react-native-bootsplash';
+
 // import AntIcon from 'react-native-vector-icons/AntDesign';
 
 const Stack = createStackNavigator();
@@ -174,6 +176,16 @@ const AuthStack = () => {
 };
 
 const App = props => {
+  useEffect(() => {
+    const init = async () => {
+      // …do multiple sync or async tasks
+    };
+
+    init().finally(async () => {
+      await RNBootSplash.hide({fade: true});
+      console.log('Bootsplash has been hidden successfully');
+    });
+  }, []);
   return (
     <NativeBaseProvider>
       <NavigationContainer>
@@ -212,6 +224,8 @@ const App = props => {
               <Drawer.Screen
                 options={{
                   title: 'All Menu',
+                  header: Header,
+                  headerTransparent: true,
                 }}
                 name="home"
                 component={Home}

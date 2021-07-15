@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  ToastAndroid,
+  Alert,
 } from 'react-native';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -16,7 +16,8 @@ import {Radio} from 'native-base';
 import {profileUser, updateProfile} from '../redux/actions/profile';
 import {authLogout} from '../redux/actions/auth';
 import {connect} from 'react-redux';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {showMessage} from 'react-native-flash-message';
 
 class EditProfile extends Component {
   state = {
@@ -65,27 +66,112 @@ class EditProfile extends Component {
       address,
       picture,
     } = this.state;
-    this.props
-      .updateProfile(
-        {userName, email, phoneNumber, firstName, lastName, address, picture},
-        token,
-      )
-      .then(() => {
-        if (this.props.profile.errMsg === '') {
-          ToastAndroid.showWithGravity(
-            'Update Success',
-            ToastAndroid.LONG,
-            ToastAndroid.TOP,
-          );
-          return this.props.navigation.navigate('Profile');
-        } else {
-          ToastAndroid.showWithGravity(
-            `${this.props.profile.errMsg}`,
-            ToastAndroid.LONG,
-            ToastAndroid.TOP,
-          );
-        }
+    if (
+      this.state.userName === '' ||
+      this.state.userName === null ||
+      this.state.userName === undefined
+    ) {
+      showMessage({
+        message: 'Please add your username',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
       });
+    } else if (
+      this.state.email === '' ||
+      this.state.email === null ||
+      this.state.email === undefined
+    ) {
+      showMessage({
+        message: 'Please add your email',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
+      });
+    } else if (
+      this.state.phoneNumber === '' ||
+      this.state.phoneNumber === null ||
+      this.state.phoneNumber === undefined
+    ) {
+      showMessage({
+        message: 'Please add your phone number',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
+      });
+    } else if (
+      this.state.firstName === '' ||
+      this.state.firstName === null ||
+      this.state.firstName === undefined
+    ) {
+      showMessage({
+        message: 'Please add your first name',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
+      });
+    } else if (
+      this.state.lastName === '' ||
+      this.state.lastName === null ||
+      this.state.lastName === undefined
+    ) {
+      showMessage({
+        message: 'Please add your last name',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
+      });
+    } else if (
+      this.state.address === '' ||
+      this.state.address === null ||
+      this.state.address === undefined
+    ) {
+      showMessage({
+        message: 'Please add your address',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
+      });
+    } else if (
+      this.state.picture === '' ||
+      this.state.picture === null ||
+      this.state.picture === undefined ||
+      this.state.picture === 'http://localhost:8080null'
+    ) {
+      showMessage({
+        message: 'Please add your picture',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
+      });
+    } else {
+      this.props
+        .updateProfile(
+          {userName, email, phoneNumber, firstName, lastName, address, picture},
+          token,
+        )
+        .then(() => {
+          if (this.props.profile.errMsg === '') {
+            showMessage({
+              message: 'Update Success',
+              type: 'default',
+              backgroundColor: '#01937C',
+              color: 'white',
+            });
+            return this.props.navigation.reset({
+              index: 0,
+              routes: [{name: 'Profile'}],
+            });
+          } else {
+            showMessage({
+              message: `${this.props.profile.errMsg}`,
+              type: 'default',
+              backgroundColor: '#D54C4C',
+              color: 'white',
+            });
+          }
+        });
+    }
   };
 
   onChange = (event, selectedDate) => {
@@ -94,21 +180,62 @@ class EditProfile extends Component {
     this.setState({date: currentDate});
   };
 
+  onPick = () => {
+    Alert.alert('Option', 'Choose your image', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Camera',
+        onPress: () => this.selectLaunch(),
+      },
+      {
+        text: 'Galery',
+        onPress: () => this.selectPict(),
+      },
+    ]);
+  };
+
   selectPict = e => {
-    if (!e.didCancel) {
-      this.setState({picture: e.assets[0].uri});
-    }
+    let options = {
+      mediaType: 'photo',
+      maxWidth: 150,
+      maxHeight: 150,
+    };
+    launchImageLibrary(options, response => {
+      if (!response.didCancel) {
+        this.setState({picture: response.assets[0].uri});
+      }
+    });
+  };
+
+  selectLaunch = e => {
+    let options = {
+      mediaType: 'photo',
+      maxWidth: 150,
+      maxHeight: 150,
+    };
+    launchCamera(options, response => {
+      if (!response.didCancel) {
+        this.setState({picture: response.assets[0].uri});
+      }
+    });
   };
 
   render() {
-    // console.log(this.state);
+    console.log(this.state);
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.warpAll}>
           <View style={styles.parentPict}>
             {this.state.picture !== 'http://localhost:8080null' ? (
               <Image
-                source={{uri: `${this.state.picture}`}}
+                source={
+                  `${this.state.picture}`
+                    ? {uri: `${this.state.picture}`}
+                    : null
+                }
                 style={styles.profilePict}
               />
             ) : (
@@ -117,9 +244,7 @@ class EditProfile extends Component {
                 style={styles.profilePict}
               />
             )}
-            <TouchableOpacity
-              style={styles.parentEdit}
-              onPress={() => launchImageLibrary({}, this.selectPict)}>
+            <TouchableOpacity style={styles.parentEdit} onPress={this.onPick}>
               <Icon name={'pencil'} size={20} color="white" />
             </TouchableOpacity>
           </View>

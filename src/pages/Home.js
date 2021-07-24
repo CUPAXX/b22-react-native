@@ -22,6 +22,7 @@ import RNBootSplash from 'react-native-bootsplash';
 class Home extends Component {
   state = {
     search: '',
+    page: 1,
     categories: [],
     favoriteProduct: [],
     coffee: [],
@@ -32,10 +33,19 @@ class Home extends Component {
     loading: true,
     itemSearch: [],
   };
+
+  search = () => {
+    const search = this.state.search;
+    const page = 1;
+    this.props.getItemSec(search, page).then(() => {
+      this.setState({itemSearch: this.props.item.search});
+      this.setState({page: 1});
+    });
+  };
+
   componentDidMount() {
     const init = async () => {
       this.getProduct();
-      this.getSearch();
     };
 
     init().finally(async () => {
@@ -81,26 +91,21 @@ class Home extends Component {
     });
   };
 
-  getSearch = () => {
-    this.props.getItemSec().then(() => {
-      this.setState({
-        itemSearch: this.props.item.data,
-        isLoading: false,
-      });
+  handleChange = val => {
+    this.setState({
+      search: val,
     });
   };
-
-  updateSearch = search => {
-    this.setState({search});
-  };
   render() {
+    console.log(this.state);
     return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
           <Text style={styles.tagLine}>A good coffee is a good day</Text>
           <SearchBar
             placeholder="Search"
-            onChangeText={this.updateSearch}
+            onChangeText={this.handleChange}
+            onSubmitEditing={() => this.search()}
             value={this.state.search}
             platform="android"
             containerStyle={styles.searchContainer}
@@ -316,7 +321,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     marginTop: 20,
     borderRadius: 100,
-    backgroundColor: '#EFEEEE',
+    backgroundColor: 'white',
     paddingHorizontal: 8,
     height: 55,
     justifyContent: 'center',

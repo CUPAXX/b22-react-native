@@ -26,7 +26,7 @@ class EditProfile extends Component {
     show: false,
     checked: 'Female',
 
-    picture: '',
+    picture: null,
     userName: '',
     email: '',
     phoneNumber: '',
@@ -224,7 +224,6 @@ class EditProfile extends Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <View style={styles.warpAll}>

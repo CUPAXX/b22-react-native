@@ -2,13 +2,15 @@ import {http} from '../../helpers/http';
 
 import {REACT_APP_BASE_URL} from '@env';
 
-export const getItemSec = () => {
+export const getItemSec = (search, page) => {
   return async dispatch => {
     try {
-      const {data} = await http().get(`${REACT_APP_BASE_URL}/item/search`);
+      const {data} = await http().get(
+        `${REACT_APP_BASE_URL}/item?page=${page}&search=${search}`,
+      );
       dispatch({
         type: 'ITEM_GET',
-        payload: data.results,
+        payload: data,
       });
     } catch (err) {
       console.log('Get item failed' + err);

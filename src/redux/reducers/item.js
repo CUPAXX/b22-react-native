@@ -1,6 +1,8 @@
 const initialState = {
   data: [],
   detail: {},
+  search: [],
+  pageInfo: {},
 };
 
 const item = (state = initialState, action) => {
@@ -8,7 +10,8 @@ const item = (state = initialState, action) => {
     case 'ITEM_GET': {
       return {
         ...state,
-        data: action.payload,
+        search: action.payload.results,
+        pageInfo: action.payload.pageInfo,
       };
     }
     case 'ITEM_GET_DETAIL': {

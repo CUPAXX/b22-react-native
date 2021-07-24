@@ -13,6 +13,7 @@ Mobile Version of <a href="https://github.com/CUPAXX/b22-frontend-coffeshop">Cof
 <br> </br>
 
 # Feature
+<ul>
 <li>Login & Register</li>
 <li>See & Update Profile</li>
 <li>See Item / product</li>
@@ -24,6 +25,7 @@ Mobile Version of <a href="https://github.com/CUPAXX/b22-frontend-coffeshop">Cof
 <li>Persist Storage</li>
 <li>Splash Screen</li>
 <li>Logout</li>
+</ul>
 
 <br> </br>
 # Showcase

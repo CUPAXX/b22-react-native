@@ -6,7 +6,7 @@ Mobile Version of <a href="https://github.com/CUPAXX/b22-frontend-coffeshop">Cof
 1. Clone this repository: https://github.com/CUPAXX/b22-react-native
 2. Clone this repository for backend server : https://github.com/CUPAXX/b22-backend-coffeeshop
 3. Create your database
-4. Install depedencies:  yarn install
+4. Install depedencies:  ```yarn install```
 5. Install Android Emulator / Use Physical Device
 6. Run Backend Server with :  ``nodemon``
 7. Run Project with : ```yarn android```

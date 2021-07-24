@@ -21,7 +21,6 @@ Mobile Version of <a href="https://github.com/CUPAXX/b22-frontend-coffeshop">Cof
 <li>Add item to cart & delete item in cart</li>
 <li>Payment / transaction</li>
 <li>History Transaction</li>
-<li>FireBase Notification</li>
 <li>Persist Storage</li>
 <li>Splash Screen</li>
 <li>Logout</li>

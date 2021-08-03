@@ -18,6 +18,7 @@ import {getItemSec} from '../redux/actions/item';
 import {getCategory} from '../redux/actions/category';
 import {getItemCategory} from '../redux/actions/cateItem';
 import RNBootSplash from 'react-native-bootsplash';
+import {Picker} from '@react-native-picker/picker';
 
 class Home extends Component {
   state = {
@@ -32,15 +33,48 @@ class Home extends Component {
     isLoading: true,
     loading: true,
     itemSearch: [],
+    sort: 'productName',
   };
 
   search = () => {
     const search = this.state.search;
+    const sort = this.state.sort;
     const page = 1;
-    this.props.getItemSec(search, page).then(() => {
+    this.props.getItemSec(search, page, sort).then(() => {
       this.setState({itemSearch: this.props.item.search});
       this.setState({page: 1});
     });
+  };
+
+  infiniteSearch = () => {
+    const search = this.state.search;
+    const page = this.state.page;
+    const sort = this.state.sort;
+    if (search !== '') {
+      this.props.getItemSec(search, page, sort).then(() => {
+        this.setState({
+          itemSearch: this.state.itemSearch.concat(this.props.item.search),
+        });
+      });
+    } else {
+    }
+  };
+
+  handleLoadMore = () => {
+    const search = this.state.search;
+    if (search !== '') {
+      if (this.state.page < this.props.item.pageInfo.totalPage) {
+        this.setState(
+          {
+            page: this.state.page + 1,
+          },
+          () => {
+            this.infiniteSearch();
+          },
+        );
+      }
+    } else {
+    }
   };
 
   componentDidMount() {
@@ -97,20 +131,50 @@ class Home extends Component {
     });
   };
   render() {
-    console.log(this.state);
+    console.log(this.props);
+    const isCloseToBottom = ({
+      layoutMeasurement,
+      contentOffset,
+      contentSize,
+    }) => {
+      const paddingToBottom = 20;
+      return (
+        layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom
+      );
+    };
     return (
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.parent}>
+        <ScrollView
+          onScroll={({nativeEvent}) => {
+            if (isCloseToBottom(nativeEvent)) {
+              this.handleLoadMore();
+            }
+          }}
+          scrollEventThrottle={3000}
+          showsVerticalScrollIndicator={false}
+          style={styles.parent}>
           <Text style={styles.tagLine}>A good coffee is a good day</Text>
-          <SearchBar
-            placeholder="Search"
-            onChangeText={this.handleChange}
-            onSubmitEditing={() => this.search()}
-            value={this.state.search}
-            platform="android"
-            containerStyle={styles.searchContainer}
-            inputStyle={styles.searchInput}
-          />
+          <View>
+            <SearchBar
+              placeholder="Search"
+              onChangeText={this.handleChange}
+              onSubmitEditing={() => this.search()}
+              value={this.state.search}
+              platform="android"
+              containerStyle={styles.searchContainer}
+              inputStyle={styles.searchInput}
+            />
+            <Picker
+              style={styles.widthPicker}
+              selectedValue={this.state.sort}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({sort: itemValue})
+              }>
+              <Picker.Item label="Name" value="productName" />
+              <Picker.Item label="Price" value="price" />
+            </Picker>
+          </View>
 
           {this.state.search !== '' ? (
             <View style={styles.parentGroup}>

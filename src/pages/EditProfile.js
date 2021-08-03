@@ -198,14 +198,26 @@ class EditProfile extends Component {
   };
 
   selectPict = e => {
-    let options = {
-      mediaType: 'photo',
-      maxWidth: 150,
-      maxHeight: 150,
-    };
-    launchImageLibrary(options, response => {
+    // let options = {
+    //   mediaType: 'photo',
+    //   maxWidth: 150,
+    //   maxHeight: 150,
+    // };
+    launchImageLibrary({}, response => {
       if (!response.didCancel) {
-        this.setState({picture: response.assets[0].uri});
+        const maxSize = 1024 * 1024 * 2;
+        if (response.assets[0].fileSize < maxSize) {
+          this.setState({picture: response.assets[0].uri});
+        } else {
+          showMessage({
+            message: 'File To Large!',
+            type: 'danger',
+            backgroundColor: '#d63031',
+            color: '#fff',
+            duration: 2000,
+          });
+          // this.setState({picture: null});
+        }
       }
     });
   };
@@ -218,7 +230,19 @@ class EditProfile extends Component {
     };
     launchCamera(options, response => {
       if (!response.didCancel) {
-        this.setState({picture: response.assets[0].uri});
+        const maxSize = 1024 * 1024 * 2;
+        if (response.assets[0].fileSize < maxSize) {
+          this.setState({picture: response.assets[0].uri});
+        } else {
+          showMessage({
+            message: 'File To Large!',
+            type: 'danger',
+            backgroundColor: '#d63031',
+            color: '#fff',
+            duration: 5000,
+          });
+          // this.setState({picture: null});
+        }
       }
     });
   };

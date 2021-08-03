@@ -45,8 +45,10 @@ class Payment extends Component {
           backgroundColor: '#01937C',
           color: 'white',
         });
-        this.props.navigation.navigate('home');
-        return this.props.deleteAllItems();
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{name: 'home'}],
+        });
       } else {
         showMessage({
           message: `${this.props.transaction.errMsg}`,

@@ -32,6 +32,20 @@ const transaction = (state = initialState, action) => {
         sccMsg: '',
       };
     }
+    case 'DELETE_TRANSACTION': {
+      return {
+        ...state,
+        sccMsg: action.payload,
+        errMsg: '',
+      };
+    }
+    case 'DELETE_TRANSACTION_FAILED': {
+      return {
+        ...state,
+        sccMsg: '',
+        errMsg: action.payload,
+      };
+    }
     default: {
       return {
         ...state,

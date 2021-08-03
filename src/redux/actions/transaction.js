@@ -21,6 +21,26 @@ export const getHistory = token => {
   };
 };
 
+export const deleteTransaction = (token, id) => {
+  console.log(token, id);
+  return async dispatch => {
+    try {
+      const {data} = await http(token).delete(
+        `${REACT_APP_BASE_URL}/private/transaction/${id}`,
+      );
+      dispatch({
+        type: 'DELETE_TRANSACTION',
+        payload: data.message,
+      });
+    } catch (err) {
+      dispatch({
+        type: 'DELETE_TRANSACTION_FAILED',
+        payload: err.response.data.message,
+      });
+    }
+  };
+};
+
 export const createTransaction = (data, token, payment_method) => {
   return async dispatch => {
     const form = new URLSearchParams();

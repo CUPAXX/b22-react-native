@@ -3,7 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
@@ -11,14 +10,31 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import ItemHistory from '../components/ItemHistory';
 import {connect} from 'react-redux';
-import {getHistory} from '../redux/actions/transaction';
-import {setOrders, deleteItems} from '../redux/actions/carts';
+import {getHistory, deleteTransaction} from '../redux/actions/transaction';
+import {showMessage} from 'react-native-flash-message';
 
 class History extends Component {
   componentDidMount() {
     const {token} = this.props.auth;
     this.props.getHistory(token);
   }
+  onDelete = id => {
+    const {token} = this.props.auth;
+    this.props.deleteTransaction(token, id).then(() => {
+      showMessage({
+        message: 'Delete History SuccessFully',
+        type: 'success',
+        backgroundColor: '#6A4029',
+        color: '#fff',
+        duration: 4000,
+      });
+      return this.props.navigation.reset({
+        index: 0,
+        routes: [{name: 'history'}],
+      });
+    });
+  };
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -42,7 +58,9 @@ class History extends Component {
                 <TouchableOpacity style={styles.actionCircle}>
                   <Icon name="favorite-border" size={25} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionCircle}>
+                <TouchableOpacity
+                  style={styles.actionCircle}
+                  onPress={() => this.onDelete(data.item.id)}>
                   <Icon name="delete-outline" size={25} />
                 </TouchableOpacity>
               </View>
@@ -77,7 +95,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   getHistory,
-  deleteItems,
+  deleteTransaction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(History);

@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
   coba: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginTop: 10,
+    paddingRight: 10,
   },
 });
 

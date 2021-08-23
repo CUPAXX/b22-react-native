@@ -81,7 +81,11 @@ project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
 
+<<<<<<< HEAD
 // apply from: "../../node_modules/react-native/react.gradle"
+=======
+apply from: "../../node_modules/react-native/react.gradle"
+>>>>>>> 8db0e6b421918585a5e260890a4f794c0b7399e7
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
-  TouchableOpacity,
   LogBox,
 } from 'react-native';
 import {connect} from 'react-redux';

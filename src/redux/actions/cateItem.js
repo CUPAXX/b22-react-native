@@ -7,6 +7,7 @@ export const getItemCategory = id => {
     const {data} = await http().get(
       `${REACT_APP_BASE_URL}/category/${id}/item`,
     );
+    console.log('test');
     dispatch({
       type: 'ITEM_GET_CATEGORY',
       payload: data.results,

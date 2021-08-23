@@ -18,6 +18,7 @@ import {authLogout} from '../redux/actions/auth';
 import {connect} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
+import {REACT_APP_BASE_URL} from '@env';
 
 class EditProfile extends Component {
   state = {
@@ -136,7 +137,7 @@ class EditProfile extends Component {
       this.state.picture === '' ||
       this.state.picture === null ||
       this.state.picture === undefined ||
-      this.state.picture === 'http://localhost:8080null'
+      this.state.picture === `${REACT_APP_BASE_URL}null`
     ) {
       showMessage({
         message: 'Please add your picture',

@@ -8,6 +8,7 @@ export const getHistory = token => {
       const {data} = await http(token).get(
         `${REACT_APP_BASE_URL}/private/transaction`,
       );
+      console.log('test');
       dispatch({
         type: 'GET_HISTORY',
         payload: data.results,
@@ -28,6 +29,7 @@ export const deleteTransaction = (token, id) => {
       const {data} = await http(token).delete(
         `${REACT_APP_BASE_URL}/private/transaction/${id}`,
       );
+      console.log('test');
       dispatch({
         type: 'DELETE_TRANSACTION',
         payload: data.message,
@@ -54,6 +56,7 @@ export const createTransaction = (data, token, payment_method) => {
         `${REACT_APP_BASE_URL}/private/transaction`,
         form.toString(),
       );
+      console.log('test');
       dispatch({
         type: 'CREATE_TRANSACTION',
         payload: axios.message,

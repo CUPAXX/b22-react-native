@@ -6,6 +6,7 @@ import cateItem from './cateItem';
 import auth from './auth';
 import profile from './profile';
 import transaction from './transaction';
+import chat from './chat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer} from 'redux-persist';
 
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   cateItem,
   profile,
   transaction,
+  chat,
 });
 
 export default reducer;

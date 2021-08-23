@@ -9,7 +9,7 @@ export const authLogin = (email, password) => {
     const form = new URLSearchParams();
     form.append('email', email);
     form.append('password', password);
-
+    console.log('test');
     try {
       const {data} = await http().post(
         `${REACT_APP_BASE_URL}/auth/login`,
@@ -39,7 +39,7 @@ export const authRegister = (email, password, phoneNumber) => {
     form2.append('email', email);
     form2.append('password', password);
     form2.append('phoneNumber', phoneNumber);
-    console.log(form2);
+    console.log('test');
     try {
       const {data} = await http().post(
         `${REACT_APP_BASE_URL}/auth/register`,

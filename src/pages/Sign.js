@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
   TextInput,
   ToastAndroid,
-  Alert,
-  Button,
 } from 'react-native';
 
 const image = require('../assets/bgSign.png');

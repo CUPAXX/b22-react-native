@@ -31,13 +31,14 @@ export const updateProfile = (
       name: 'test.jpg',
       type: 'image/jpeg',
     });
-    console.log(form);
+    console.log('test');
 
     try {
       const {data} = await http(token).patch(
         `${REACT_APP_BASE_URL}/private/profile`,
         form,
       );
+      console.log('test');
       dispatch({
         type: 'PROFILE_UPDATE',
         payload: data.results,

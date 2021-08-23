@@ -17,7 +17,8 @@ const Header = ({navigation, scene}) => {
           scene.route.name === 'Cart' ||
           scene.route.name === 'root' ||
           scene.route.name === 'SeeMore' ||
-          scene.route.name === 'history'
+          scene.route.name === 'history' ||
+          scene.route.name === 'Chat'
             ? HeaderStyles.headerSec
             : HeaderStyles.header
         }>

@@ -8,6 +8,7 @@ export const getItemSec = (search, page, sort) => {
       const {data} = await http().get(
         `${REACT_APP_BASE_URL}/item?page=${page}&search=${search}&limit=3&sort[${sort}]`,
       );
+      console.log('test');
       dispatch({
         type: 'ITEM_GET',
         payload: data,

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "464382464243",
+    "project_id": "coffeshop-chat",
+    "storage_bucket": "coffeshop-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464382464243:android:807b3309007ff97385a786",
+        "android_client_info": {
+          "package_name": "com.coffeeshopapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464382464243-7btu1cs1fk2d6kibd1i6ag8qjhimpgrf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBenIJntTmHt8WDqXaZmHL9xh4LF6TQNpo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "464382464243-7btu1cs1fk2d6kibd1i6ag8qjhimpgrf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -360,7 +360,7 @@ class Home extends Component {
             <Icon name={'user-o'} size={30} color="#ADADAF" />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Edit Profile')}>
+            onPress={() => this.props.navigation.navigate('Chat')}>
             <Icon name={'commenting-o'} size={30} color="#ADADAF" />
           </TouchableOpacity>
         </View>

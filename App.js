@@ -23,6 +23,8 @@ import SignLogin from './src/pages/SignLogin';
 import Login from './src/pages/Login';
 import Sign from './src/pages/Sign';
 import Forgot from './src/pages/Forgot';
+import Chat from './src/pages/Chat';
+import RoomChat from './src/pages/RoomChat';
 
 import History from './src/pages/History';
 
@@ -109,6 +111,22 @@ class MainStack extends Component {
         <Stack.Screen
           component={EditProfile}
           name="Edit Profile"
+          options={{
+            header: Header,
+            headerTransparent: true,
+          }}
+        />
+        <Stack.Screen
+          component={Chat}
+          name="Chat"
+          options={{
+            header: Header,
+            headerTransparent: true,
+          }}
+        />
+        <Stack.Screen
+          component={RoomChat}
+          name="Room Chat"
           options={{
             header: Header,
             headerTransparent: true,

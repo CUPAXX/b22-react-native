@@ -17,6 +17,8 @@ import {profileUser} from '../redux/actions/profile';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
+import ChatBubbleLeft from '../components/ChatBubbleLeft';
+import ChatBubbleRight from '../components/ChatBubbleRight';
 
 import {io} from 'socket.io-client';
 import {REACT_APP_BASE_URL} from '@env';
@@ -80,16 +82,33 @@ class RoomChat extends Component {
     const {token} = this.props.auth;
     const recipient = this.state.selectedUser.phoneNumber;
 
-    this.props.sendChat(recipient, message, token).then(() => {
-      this.props.chatAll(recipient, token).then(() => {
+    if (message !== '') {
+      this.props.sendChat(recipient, message, token).then(() => {
+        this.props.chatAll(recipient, token).then(() => {
+          this.setState({
+            dataChat: this.props.chat.allData,
+          });
+        });
         this.setState({
-          dataChat: this.props.chat.allData,
+          inputMsg: '',
         });
       });
-      this.setState({
-        inputMsg: '',
+      setTimeout(() => {
+        showMessage({
+          message: 'Send Message Success',
+          type: 'default',
+          backgroundColor: '#01937C',
+          color: 'white',
+        });
+      }, 2000);
+    } else {
+      showMessage({
+        message: 'message cannot be empty',
+        type: 'default',
+        backgroundColor: '#D54C4C',
+        color: 'white',
       });
-    });
+    }
   };
 
   onPick = () => {
@@ -124,6 +143,14 @@ class RoomChat extends Component {
             .then(() => {
               this.getData();
             });
+          setTimeout(() => {
+            showMessage({
+              message: 'Send File Success',
+              type: 'default',
+              backgroundColor: '#01937C',
+              color: 'white',
+            });
+          }, 2000);
         } else {
           showMessage({
             message: 'File To Large!',
@@ -154,6 +181,14 @@ class RoomChat extends Component {
             .then(() => {
               this.getData();
             });
+          setTimeout(() => {
+            showMessage({
+              message: 'Send File Success',
+              type: 'default',
+              backgroundColor: '#01937C',
+              color: 'white',
+            });
+          }, 2000);
         } else {
           showMessage({
             message: 'File To Large!',
@@ -225,49 +260,21 @@ class RoomChat extends Component {
             }>
             {this.state.dataChat.map(data => {
               return data.sender !== this.props.profile.data.phoneNumber ? (
-                <TouchableOpacity
+                <ChatBubbleLeft
                   key={data.id}
-                  onPress={() => this.onDel(data.id)}
-                  style={styles.parentChat}>
-                  <View>
-                    <Image
-                      style={styles.chatImage}
-                      source={{uri: `${data.picture}`}}
-                    />
-                  </View>
-                  <View style={styles.parentText}>
-                    {data.message !== null ? (
-                      <Text style={styles.textMsg}>{data.message}</Text>
-                    ) : (
-                      <Image
-                        style={styles.fileUpload}
-                        source={{uri: `${data.fileUpload}`}}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
+                  press={() => this.onDel(data.id)}
+                  picture={data.picture}
+                  message={data.message}
+                  fileUpload={data.fileUpload}
+                />
               ) : (
-                <TouchableOpacity
+                <ChatBubbleRight
                   key={data.id}
-                  onPress={() => this.onDel(data.id)}
-                  style={styles.parentChat2}>
-                  <View style={styles.parentText2}>
-                    {data.message !== null ? (
-                      <Text style={styles.textMsg2}>{data.message}</Text>
-                    ) : (
-                      <Image
-                        style={styles.fileUpload}
-                        source={{uri: `${data.fileUpload}`}}
-                      />
-                    )}
-                  </View>
-                  <View>
-                    <Image
-                      style={styles.chatImage}
-                      source={{uri: `${this.props.profile.data.picture}`}}
-                    />
-                  </View>
-                </TouchableOpacity>
+                  press={() => this.onDel(data.id)}
+                  picture={this.props.profile.data.picture}
+                  message={data.message}
+                  fileUpload={data.fileUpload}
+                />
               );
             })}
           </ScrollView>

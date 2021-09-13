@@ -35,4 +35,4 @@ Welcome Screen | Home Screen | Detail Product Screen | Payment Screen
 
 <br> </br>
 # Author
-<a href="https://www.instagram.com/xfiqryx/">CUPAXXHD</a>
+<a href="https://www.instagram.com/xfiqryx/">M Fiqry Arahmansyah</a>
